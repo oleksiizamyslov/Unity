@@ -1,19 +1,15 @@
 namespace Prototype.Stub;
 
+class StubCore
+{
+    
+}
+
 public static class StubGameFacade
 {
     private const int PlayerStartAge = 18;
     private const int LifeEventsCount = 10;
-    
-    public static IGameFacade GetFacade()
-    {
-        var worldData = GetWorldData();
-        var ev = GetEvents();
-        var eog = new EndOfGameData(StubImages.EndOfGameImage, "Game over");
-        var ret = new TestGameFacade(ev, worldData, PlayerStartAge, eog, StubImages.WaitingImages);
-        return ret;
-    }
-    
+
     private static IWorldData GetWorldData()
     {
         var dialogs = Enumerable.Range(0, 6).Select(GetDialog).ToArray();
@@ -40,4 +36,12 @@ public static class StubGameFacade
         return ret.ToArray();
     }
 
+    public static IScreenRenderer GetRenderer()
+    {
+        var worldData = GetWorldData();
+        var ev = GetEvents();
+        var eog = new EndOfGameData(StubImages.EndOfGameImage, "Game over");
+        var ret = new StubGameCore(ev, worldData, PlayerStartAge, eog, StubImages.WaitingImages);
+        return ret.ResolveRenderer();
+    }
 }

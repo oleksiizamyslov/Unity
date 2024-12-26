@@ -9,37 +9,38 @@ public class UsageExampleTest
     [Fact]
     public void Main_Game_Cycle()
     {
-        var gf = StubGameFacade.GetFacade();
+        var gf = StubGameFacade.GetRenderer();
         var mockPresenter = new UiMockPresenter();
         var log = new StringBuilder();
 
         while (true)
         {
-            if (gf.State == State.InDialog)
+            if (gf.DialogScreen != null)
             {
-                var res = mockPresenter.ShowDialog(gf.PendingDialog!);
-                gf.RecordDialogResult(res);
+                var res = mockPresenter.ShowDialog(gf.DialogScreen.PendingDialog!);
+                gf = gf.DialogScreen.DialogComplete(res);
                 log.AppendLine($"{gf.PlayerData.Age}: Dialog result: {res}");
             }
-            else if (gf.State == State.InWaiting)
+            else if (gf.WaitingScreen != null)
             {
-                var res = mockPresenter.Wait(gf.PlayerData.Age, gf.WaitingData!, gf.GetWorldData);
-                if (res.worldDialogResult != null)
-                {
-                    gf.RecordWorldDialogResult(res.worldDialogResult, res.age);
-                    log.AppendLine($"{gf.PlayerData.Age}: World result at {res.age}: {res.worldDialogResult}");
-                }
-                else
-                {
-                    gf.RecordWaitedUntil(res.age);
-                    log.AppendLine($"{gf.PlayerData.Age}: Wait until {res.age}");
-                }
+                var res = mockPresenter.Wait(gf.PlayerData.Age, gf.WaitingScreen.WaitingData!);
+                gf = gf.WaitingScreen.WaitUntil(res);
+            }
+            else if (gf.WorldScreen != null)
+            {
+                var result = mockPresenter.ShowWorldDialog(gf.WorldScreen.WorldData, gf.WorldScreen.PlayerData);
+                log.AppendLine($"{gf.PlayerData.Age}: World result {result}");
+                gf = gf.WorldScreen.RecordWorldDialogResult(result);
+            }
+            else if (gf.EndOfGameScreen != null)
+            {
+                mockPresenter.ShowEndOfGame(gf.EndOfGameScreen.Data!);
+                log.AppendLine($"{gf.PlayerData.Age}: Game over");
+                break;
             }
             else
             {
-                mockPresenter.ShowEndOfGame(gf.EndOfGameData!);
-                log.AppendLine($"{gf.PlayerData.Age}: Game over");
-                break;
+                throw new InvalidDataException();
             }
         }
 
