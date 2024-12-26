@@ -8,7 +8,7 @@ public interface IGameFacade
     IWorldData GetWorldData(Age atAge);
     IPlayerData PlayerData { get; }
     IEndOfGameData? EndOfGameData { get; }
-    void SendWaitedUntil(Age age);
-    void SendDialogResult(IDialogResult dialogResult);
-    void SendWorldDialogResult(IDialogResult dialogResult, Age age);
+    void RecordWaitedUntil(Age age);
+    void RecordDialogResult(IDialogResult dialogResult);
+    void RecordWorldDialogResult(IDialogResult dialogResult, Age age);
 }

@@ -1,11 +1,7 @@
-using Prototype;
-
-namespace TestProto;
+namespace Prototype;
 
 public class UiMockPresenter
 {
-    public static Random Random = new(1);
-        
     public void RefreshPlayerData(IPlayerData playerData)
     {
         // refresh 4 stats in the top and age in the bottom.
@@ -31,7 +27,7 @@ public class UiMockPresenter
         // Time passes at X seconds per Year (let's start with X = 4)
         // As the time passes, you show images from the waitingData
         // User can stop playing at any moment to see world dialog, choose something and affect the game.
-        var waitTillEnd = (Random.Next(0, 2)%2) == 0;
+        var waitTillEnd = (Stub.Stub.R.Next(0, 2)%2) == 0;
         if (waitTillEnd)
         {
             return (waitingData.WaitingUntil, null);
@@ -40,7 +36,7 @@ public class UiMockPresenter
         {
             var stoppedAtAge = RandomTimeBetween(currentAge, waitingData.WaitingUntil);
             var worldData = worldDataFunc(stoppedAtAge);
-            var chosenDialog = worldData.DialogsAvailable[Random.Next(worldData.DialogsAvailable.Length)];
+            var chosenDialog = worldData.DialogsAvailable[Stub.Stub.R.Next(worldData.DialogsAvailable.Length)];
             var res = ShowDialog(chosenDialog);
             return (stoppedAtAge, res);
         }
@@ -49,7 +45,7 @@ public class UiMockPresenter
     private Age RandomTimeBetween(Age currentAge, Age waitingDataWaitingUntil)
     {
         var daysDiff = waitingDataWaitingUntil.Days-currentAge.Days;
-        var r = Random.Next(daysDiff);
+        var r = Stub.Stub.R.Next(daysDiff);
         var ret = new Age(currentAge.Days + r);
         return ret;
     }

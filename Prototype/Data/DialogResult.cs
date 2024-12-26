@@ -24,4 +24,9 @@ public class DialogResult : IDialogResult
         c2.Add(choice);
         return new DialogResult(s2.ToArray(), c2.ToArray());
     }
+
+    public override string ToString()
+    {
+        return $"{string.Join(", ", Choices)}; {string.Join(", ", Steps.Select(p => p.ToString()))}";
+    }
 }

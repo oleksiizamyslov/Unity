@@ -1,6 +1,11 @@
 namespace Prototype;
 
-public class NumericDialogItem : IDialogItem
+public interface IStateful
+{
+    
+}
+
+public class NumericDialogItem : IDialogItem, IStateful
 {
     public NumericDialogItem(string text, int minValue, int maxValue, int value)
     {
@@ -14,4 +19,10 @@ public class NumericDialogItem : IDialogItem
     public int MinValue { get; }
     public int MaxValue { get; }
     public int Value { get; set; }
+
+    public override string ToString()
+    {
+        return $"NUM {Text}: {Value}";
+    }
+    
 }

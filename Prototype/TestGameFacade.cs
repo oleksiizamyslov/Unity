@@ -15,6 +15,7 @@ public class TestGameFacade : IGameFacade
         _agingImages = agingImages;
         _events = new Queue<LifeEvent>(events);
         _playerData = new PlayerData(new Age(startingAge * 360), 100, 1000, 10, "ABCD");
+        PutNextEvent();
     }
     
     private PlayerData _playerData;
@@ -31,19 +32,19 @@ public class TestGameFacade : IGameFacade
 
     public IPlayerData PlayerData => _playerData;
 
-    public void SendWaitedUntil(Age age)
+    public void RecordWaitedUntil(Age age)
     {
         SetAge(age);
         ScrollForward();
     }
 
-    public void SendDialogResult(IDialogResult dialogResult)
+    public void RecordDialogResult(IDialogResult dialogResult)
     {
         PendingDialog = null;
         ScrollForward();
     }
 
-    public void SendWorldDialogResult(IDialogResult dialogResult, Age age)
+    public void RecordWorldDialogResult(IDialogResult dialogResult, Age age)
     {
         SetAge(age);
         ScrollForward();
@@ -81,7 +82,7 @@ public class TestGameFacade : IGameFacade
         else
         {
             var evt = _events.Peek();
-            if (evt.Age.Days < _playerData.Age.Days)
+            if (evt.Age.Days > _playerData.Age.Days)
             {
                 var waitingData = GetWaitingData(evt.Age);
                 SetState(State.InWaiting, null, null, waitingData);

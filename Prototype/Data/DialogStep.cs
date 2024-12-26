@@ -16,4 +16,10 @@ internal class DialogStep : IDialogStep
     public IDialogItem[] Items { get; }
     public bool IsFinal { get; private set; }
     public IDialogResult Result { get; private set; }
+
+    public override string ToString()
+    {
+        var s =Items.Where(p => p is IStateful).Select(p => p.ToString());
+        return string.Join(", ", s);
+    }
 }

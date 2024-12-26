@@ -1,6 +1,6 @@
 namespace Prototype;
 
-public class MockImages
+public class StubImages
 {
     private static string[] _dialogImages = new[]
     {
