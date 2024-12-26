@@ -1,4 +1,4 @@
-namespace TestProto;
+namespace Prototype;
 
 public class MockImages
 {
